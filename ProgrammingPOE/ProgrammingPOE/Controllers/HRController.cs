@@ -33,7 +33,7 @@ namespace ProgrammingPOE.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(string FullName, string Email, string Role, decimal HourlyRate, string Password, string ConfirmPassword)
         {
-            // Create a new model for the view in ca
+            
             var model = new ApplicationUser
             {
                 FullName = FullName,
