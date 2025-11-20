@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">Welcome to the Contract Monthly Claim System (CMCS)</h1>
+        <p class="lead text-muted">
+            Streamlining claim submissions, approvals, and tracking for Independent Contractor Lecturers.
+        </p>
+    </div>
+
+    <div class="row text-center">
+        <!-- Lecturer Card -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-primary fw-bold">Lecturer</h5>
+                    <p class="card-text">
+                        Submit and track your monthly claims easily, with the ability to upload supporting documents.
+                    </p>
+                    <a asp-controller="Lecturer" asp-action="SubmitClaim" class="btn btn-primary">Submit Claim</a>
+                    <a asp-controller="Lecturer" asp-action="TrackClaims" class="btn btn-outline-primary mt-2">Track Claims</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coordinator Card -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-success fw-bold">Coordinator</h5>
+                    <p class="card-text">
+                        Review claims submitted by lecturers and ensure accuracy before forwarding for approval.
+                    </p>
+                    <a asp-controller="Coordinator" asp-action="ReviewClaims" class="btn btn-success">Review Claims</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manager Card -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-danger fw-bold">Manager</h5>
+                    <p class="card-text">
+                        Provide the final approval for claims, ensuring accountability and transparency.
+                    </p>
+                    <a asp-controller="Manager" asp-action="FinalApproval" class="btn btn-danger">Final Approval</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- HR Card -->
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-info fw-bold">HR Administrator</h5>
+                    <p class="card-text">
+                        Manage users, generate reports, and oversee the entire claims management system.
+                    </p>
+                    <a asp-controller="HR" asp-action="UserManagement" class="btn btn-info">User Management</a>
+                    <a asp-controller="HR" asp-action="GenerateReports" class="btn btn-outline-info mt-2">Reports</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Section (Optional) -->
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Quick Access</h5>
+                        <p class="card-text">
+                            Welcome back! Use the navigation above or the cards below to access your assigned features.
+                        </p>
+                        @if (User.IsInRole("HR"))
+                        {
+                            <span class="badge bg-info me-2">HR Administrator</span>
+                        }
+                        @if (User.IsInRole("Lecturer"))
+                        {
+                            <span class="badge bg-primary me-2">Lecturer</span>
+                        }
+                        @if (User.IsInRole("Coordinator"))
+                        {
+                            <span class="badge bg-success me-2">Coordinator</span>
+                        }
+                        @if (User.IsInRole("Manager"))
+                        {
+                            <span class="badge bg-danger me-2">Manager</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    

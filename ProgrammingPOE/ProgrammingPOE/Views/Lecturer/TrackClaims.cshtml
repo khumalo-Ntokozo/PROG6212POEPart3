@@ -1,0 +1,96 @@
+﻿@model IEnumerable<ProgrammingPOE.Models.Claim>
+@{
+    ViewData["Title"] = "Track Claims";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4">My Claims</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <h5>No claims submitted yet.</h5>
+            <p class="mb-0">You haven't submitted any claims. <a asp-action="SubmitClaim" class="alert-link">Submit your first claim</a> to get started.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Claim ID</th>
+                        <th>Submission Date</th>
+                        <th>Hours</th>
+                        <th>Rate</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Documents</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var claim in Model)
+                    {
+                        <tr>
+                            <td>@claim.ClaimId</td>
+                            <td>@claim.SubmissionDate.ToString("dd MMM yyyy")</td>
+                            <td>@claim.HoursWorked</td>
+                            <td>R @claim.HourlyRate</td>
+                            <td class="fw-bold">R @claim.TotalAmount</td>
+                            <td>
+                                @switch (claim.Status)
+                                {
+                                    case ClaimStatus.Pending:
+                                        <span class="badge bg-warning">Pending</span>
+                                        break;
+                                    case ClaimStatus.CoordinatorApproved:
+                                        <span class="badge bg-info">Coordinator Approved</span>
+                                        break;
+                                    case ClaimStatus.CoordinatorRejected:
+                                        <span class="badge bg-danger">Coordinator Rejected</span>
+                                        break;
+                                    case ClaimStatus.ManagerApproved:
+                                        <span class="badge bg-success">Manager Approved</span>
+                                        break;
+                                    case ClaimStatus.ManagerRejected:
+                                        <span class="badge bg-danger">Manager Rejected</span>
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary">@claim.Status</span>
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                @if (claim.Documents?.Any() == true)
+                                {
+                                    @foreach (var doc in claim.Documents)
+                                    {
+                                        <a href="@doc.FilePath" target="_blank" class="btn btn-sm btn-outline-primary">
+                                            View Document
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No documents</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <div class="mt-3">
+        <a asp-action="SubmitClaim" class="btn btn-primary">Submit New Claim</a>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+EXAM MARKING SUMMARY
+Course: Programming POE
+Exam Date: 10 March 2025
+Marker: Dr. John Lecturer
+
+Total Scripts: 120
+Hours Spent Marking: 30 hours
+Average Time per Script: 15 minutes
+
+Marking Breakdown:
+- Question 1: 5 hours
+- Question 2: 8 hours  
+- Question 3: 7 hours
+- Question 4: 6 hours
+- Quality Review: 4 hours
+
+Special Cases:
+- 3 scripts required re-marking
+- 5 scripts had exceptional work
+- All marks recorded in system
+
+Department Head Verified: Yes

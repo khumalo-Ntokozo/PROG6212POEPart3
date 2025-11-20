@@ -1,0 +1,107 @@
+﻿@model IEnumerable<ProgrammingPOE.ViewModels.ClaimViewModel>
+
+@{
+    ViewData["Title"] = "Final Approval";
+}
+
+<div class="container mt-4">
+    <h2 class="text-danger mb-4">Final Approval - Manager</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning">
+            <h5>No claims pending final approval.</h5>
+            <p class="mb-0">All coordinator-approved claims have been processed. Check back later for new submissions.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="card-title mb-0">Claim #@item.Claim.ClaimId</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <strong>Lecturer:</strong> @item.LecturerName<br>
+                                <strong>Submitted:</strong> @item.Claim.SubmissionDate.ToString("dd MMM yyyy HH:mm")<br>
+                                <strong>Hours Worked:</strong> @item.Claim.HoursWorked<br>
+                                <strong>Hourly Rate:</strong> R @item.Claim.HourlyRate<br>
+                                <strong>Total Amount:</strong> <span class="fw-bold text-danger">R @item.Claim.TotalAmount</span><br>
+                                <strong>Current Status:</strong>
+                                @switch (item.Claim.Status)
+                                {
+                                    case ClaimStatus.Pending:
+                                        <span class="badge bg-warning">Pending</span>
+                                        break;
+                                    case ClaimStatus.CoordinatorApproved:
+                                        <span class="badge bg-info">Coordinator Approved</span>
+                                        break;
+                                    case ClaimStatus.CoordinatorRejected:
+                                        <span class="badge bg-danger">Coordinator Rejected</span>
+                                        break;
+                                    case ClaimStatus.ManagerApproved:
+                                        <span class="badge bg-success">Manager Approved</span>
+                                        break;
+                                    case ClaimStatus.ManagerRejected:
+                                        <span class="badge bg-danger">Manager Rejected</span>
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary">@item.Claim.Status</span>
+                                        break;
+                                }
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(item.Claim.Notes))
+                            {
+                                <div class="mb-3">
+                                    <strong>Notes:</strong>
+                                    <p class="mb-0 text-muted">@item.Claim.Notes</p>
+                                </div>
+                            }
+
+                            @if (item.Claim.Documents?.Any() == true)
+                            {
+                                <div class="mb-3">
+                                    <strong>Supporting Documents:</strong>
+                                    <div class="mt-1">
+                                        @foreach (var doc in item.Claim.Documents)
+                                        {
+                                            <a href="@doc.FilePath" target="_blank" class="btn btn-sm btn-outline-danger me-1 mb-1">
+                                                📄 @doc.FileName
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="mt-3">
+                                <form asp-action="Approve" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@item.Claim.ClaimId" />
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-success">Final Approve</button>
+                                </form>
+                                <form asp-action="Reject" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@item.Claim.ClaimId" />
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger">Final Reject</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

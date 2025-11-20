@@ -1,0 +1,23 @@
+MONTHLY TIMESHEET - MARCH 2025
+Lecturer: Dr. John Lecturer
+Department: Computer Science
+
+Week 1: 10 hours
+- Programming lectures: 6 hours
+- Student consultations: 4 hours
+
+Week 2: 12 hours  
+- Database design: 8 hours
+- Lab supervision: 4 hours
+
+Week 3: 8 hours
+- Web development: 6 hours
+- Marking assignments: 2 hours
+
+Week 4: 10 hours
+- Exam preparation: 6 hours
+- Department meeting: 4 hours
+
+TOTAL HOURS: 40 hours
+Signature: _________________
+Date: 21 March 2025

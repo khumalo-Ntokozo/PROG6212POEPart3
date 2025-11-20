@@ -1,0 +1,112 @@
+﻿@model ProgrammingPOE.Models.Claim
+@{
+    ViewData["Title"] = "Submit Claim";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Submit Monthly Claim</h3>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Message"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["Message"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form asp-action="SubmitClaim" enctype="multipart/form-data" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label asp-for="HoursWorked" class="form-label fw-bold">Hours Worked</label>
+                                <input asp-for="HoursWorked" type="number" step="0.5" min="0.5" max="500"
+                                       class="form-control" required placeholder="Enter hours worked"
+                                       onchange="calculateTotal()">
+                                <span asp-validation-for="HoursWorked" class="text-danger"></span>
+                                <small class="form-text text-muted">Minimum 0.5 hours, maximum 500 hours</small>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="HourlyRate" class="form-label fw-bold">Hourly Rate (ZAR)</label>
+                                <input asp-for="HourlyRate" type="number" step="0.01" min="1" max="10000"
+                                       class="form-control" required placeholder="Enter hourly rate"
+                                       onchange="calculateTotal()">
+                                <span asp-validation-for="HourlyRate" class="text-danger"></span>
+                                <small class="form-text text-muted">Your standard rate is R@(ViewBag.UserHourlyRate?.ToString("F2") ?? "0.00")</small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Total Amount (ZAR)</label>
+                            <input type="text" class="form-control bg-light fw-bold" id="totalAmount" readonly
+                                   value="R 0.00" />
+                            <small class="form-text text-muted">Calculated automatically: Hours × Rate</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label fw-bold">Additional Notes (Optional)</label>
+                            <textarea asp-for="Notes" class="form-control" rows="4"
+                                      placeholder="Enter any additional information about this claim..."></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="upload" class="form-label fw-bold">Supporting Document (Optional)</label>
+                            <input name="upload" type="file" class="form-control"
+                                   accept=".pdf,.doc,.docx,.xlsx,.xls,.txt,.jpg,.jpeg,.png,.gif,.bmp">
+                            <small class="form-text text-muted">
+                                Allowed formats: PDF, Word, Excel, Images, Text files. Maximum file size: 5MB
+                            </small>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                Submit Claim
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <a href="@Url.Action("TrackClaims", "Lecturer")" class="btn btn-outline-secondary">
+                        View My Claims
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function calculateTotal() {
+            const hours = parseFloat(document.getElementById('HoursWorked').value) || 0;
+            const rate = parseFloat(document.getElementById('HourlyRate').value) || 0;
+            const total = hours * rate;
+            document.getElementById('totalAmount').value = 'R ' + total.toFixed(2);
+        }
+
+        // Initialize calculation on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default hourly rate from user profile if available
+            const userRate = @(ViewBag.UserHourlyRate?.ToString("0.00") ?? "0");
+            if (userRate > 0) {
+                document.getElementById('HourlyRate').value = userRate;
+            }
+            calculateTotal();
+        });
+    </script>
+}

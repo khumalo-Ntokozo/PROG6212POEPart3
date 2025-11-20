@@ -1,0 +1,81 @@
+﻿@model List<ApplicationUser>
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<div class="container mt-4">
+    <h2>User Management</h2>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    <div class="mb-3">
+        <a href="@Url.Action("CreateUser", "HR")" class="btn btn-primary">Create New User</a>
+        <a href="@Url.Action("GenerateReports", "HR")" class="btn btn-info">Generate Reports</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Hourly Rate</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+                        <td>
+                            <span class="badge @(user.Role == "Lecturer" ? "bg-primary" :
+                                                                                user.Role == "Coordinator" ? "bg-success" :
+                                                                                user.Role == "Manager" ? "bg-danger" : "bg-info")">
+                            @user.Role
+                        </span>
+                    </td>
+                    <td>@(user.Role == "Lecturer" ? user.HourlyRate.ToString("C") : "N/A")</td>
+                    <td>
+                        <span class="badge @(user.IsActive ? "bg-success" : "bg-danger")">
+                            @(user.IsActive ? "Active" : "Inactive")
+                        </span>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("EditUser", "HR", new { id = user.Id })" class="btn btn-sm btn-warning">Edit</a>
+                        @if (user.IsActive)
+                            {
+                                <form method="post" action="@Url.Action("DeactivateUser", "HR")" style="display:inline;">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure you want to deactivate this user?')">
+                                        Deactivate
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" action="@Url.Action("ActivateUser", "HR")" style="display:inline;">
+                                    <input type="hidden" name="id" value="@user.Id" />
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        Activate
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

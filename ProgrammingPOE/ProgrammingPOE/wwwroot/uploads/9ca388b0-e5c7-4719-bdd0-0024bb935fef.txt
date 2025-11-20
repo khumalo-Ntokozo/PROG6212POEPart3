@@ -1,0 +1,21 @@
+WORKSHOP ATTENDANCE REGISTER
+Advanced Programming Workshop
+Date: 15 March 2025
+Duration: 8 hours
+Facilitator: Dr. John Lecturer
+
+ATTENDEES:
+1. Student 1 - 123456
+2. Student 2 - 123457
+3. Student 3 - 123458
+...
+25. Student 25 - 123480
+
+Workshop Topics:
+- Advanced C# Programming
+- ASP.NET MVC Patterns
+- Entity Framework Advanced
+- Web API Development
+
+Materials distributed: 25 sets
+Venue: Computer Lab 3A
